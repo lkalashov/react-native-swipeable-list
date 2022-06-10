@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-import React from 'react';
-import { Animated, I18nManager, PanResponder, StyleSheet, View } from 'react-native';
+import React from "react";
+import { Animated, I18nManager, PanResponder, StyleSheet, View } from "react-native";
 
 // import type { LayoutEvent, PressEvent } from 'CoreEventTypes';
 // import type { GestureState } from 'PanResponder';
@@ -97,7 +97,7 @@ class SwipeableRow extends React.Component {
     _handlePanResponderEnd = (event, gestureState) => {
         const horizontalDistance = IS_RTL ? -gestureState.dx : gestureState.dx;
         if (this._isSwipingRightFromClosed(gestureState)) {
-            this.props.onOpen && this.props.onOpen();
+            this.props.onClose && this.props.onClose();
             this._animateBounceBack(RIGHT_SWIPE_BOUNCE_BACK_DURATION);
         } else if (this._shouldAnimateRemainder(gestureState)) {
             if (horizontalDistance < 0) {
@@ -180,12 +180,8 @@ class SwipeableRow extends React.Component {
         // The view hidden behind the main view
         let slideOutView;
         if (this.state.isSwipeableViewRendered && this.state.rowHeight) {
-	    slideOutView = (
-                <View style={[
-                    styles.slideOutContainer, 
-                    { height: this.state.rowHeight }, 
-                    !this.props.isOpen ? { display: "none", opacity: 0 } : null
-                ]}>
+            slideOutView = (
+                <View style={[styles.slideOutContainer, { height: this.state.rowHeight }, !this.props.isOpen ? { display: "none", opacity: 0 } : null]}>
                     {this.props.slideoutView}
                 </View>
             );
@@ -193,10 +189,7 @@ class SwipeableRow extends React.Component {
 
         // The swipeable item
         const swipeableView = (
-            <Animated.View
-                onLayout={this._onSwipeableViewLayout}
-                style={{ transform: [{ translateX: this.state.currentLeft }] }}
-            >
+            <Animated.View onLayout={this._onSwipeableViewLayout} style={{ transform: [{ translateX: this.state.currentLeft }] }}>
                 {this.props.children}
             </Animated.View>
         );
@@ -214,7 +207,7 @@ class SwipeableRow extends React.Component {
         this._animateToClosedPosition();
     }
 
-    _onSwipeableViewLayout = event => {
+    _onSwipeableViewLayout = (event) => {
         this.setState({
             isSwipeableViewRendered: true,
             rowHeight: event.nativeEvent.layout.height,
@@ -231,9 +224,7 @@ class SwipeableRow extends React.Component {
     }
 
     _swipeSlowSpeed(gestureState) {
-        this.state.currentLeft.setValue(
-            this._previousLeft + gestureState.dx / SLOW_SPEED_SWIPE_FACTOR
-        );
+        this.state.currentLeft.setValue(this._previousLeft + gestureState.dx / SLOW_SPEED_SWIPE_FACTOR);
     }
 
     _isSwipingExcessivelyRightFromClosedPosition(gestureState) {
@@ -243,9 +234,7 @@ class SwipeableRow extends React.Component {
          * functionally.
          */
         const gestureStateDx = IS_RTL ? -gestureState.dx : gestureState.dx;
-        return (
-            this._isSwipingRightFromClosed(gestureState) && gestureStateDx > RIGHT_SWIPE_THRESHOLD
-        );
+        return this._isSwipingRightFromClosed(gestureState) && gestureStateDx > RIGHT_SWIPE_THRESHOLD;
     }
 
     _animateTo(toValue, duration = SWIPE_DURATION, callback = emptyFunction) {
@@ -270,10 +259,7 @@ class SwipeableRow extends React.Component {
          * Ensure the speed is at least the set speed threshold to prevent a slow
          * swiping animation
          */
-        speed =
-            speed > HORIZONTAL_FULL_SWIPE_SPEED_THRESHOLD
-                ? speed
-                : HORIZONTAL_FULL_SWIPE_SPEED_THRESHOLD;
+        speed = speed > HORIZONTAL_FULL_SWIPE_SPEED_THRESHOLD ? speed : HORIZONTAL_FULL_SWIPE_SPEED_THRESHOLD;
         const maxSwipeDistance = this.props.maxSwipeDistance ?? 0;
         /**
          * Calculate the duration the row should take to swipe the remaining distance
@@ -297,24 +283,14 @@ class SwipeableRow extends React.Component {
          * When swiping right, we want to bounce back past closed position on release
          * so users know they should swipe right to get content.
          */
-        const swipeBounceBackDistance = IS_RTL
-            ? -RIGHT_SWIPE_BOUNCE_BACK_DISTANCE
-            : RIGHT_SWIPE_BOUNCE_BACK_DISTANCE;
-        this._animateTo(
-            -swipeBounceBackDistance,
-            duration,
-            this._animateToClosedPositionDuringBounce
-        );
+        const swipeBounceBackDistance = IS_RTL ? -RIGHT_SWIPE_BOUNCE_BACK_DISTANCE : RIGHT_SWIPE_BOUNCE_BACK_DISTANCE;
+        this._animateTo(-swipeBounceBackDistance, duration, this._animateToClosedPositionDuringBounce);
     }
 
     // Ignore swipes due to user's finger moving slightly when tapping
     _isValidSwipe(gestureState) {
         const preventSwipeRight = this.props.preventSwipeRight ?? false;
-        if (
-            preventSwipeRight &&
-            this._previousLeft === CLOSED_LEFT_POSITION &&
-            gestureState.dx > 0
-        ) {
+        if (preventSwipeRight && this._previousLeft === CLOSED_LEFT_POSITION && gestureState.dx > 0) {
             return false;
         }
 
@@ -327,10 +303,7 @@ class SwipeableRow extends React.Component {
          * if they let go
          */
         const swipeThreshold = this.props.swipeThreshold ?? DEFAULT_SWIPE_THRESHOLD;
-        return (
-            Math.abs(gestureState.dx) > swipeThreshold ||
-            gestureState.vx > HORIZONTAL_FULL_SWIPE_SPEED_THRESHOLD
-        );
+        return Math.abs(gestureState.dx) > swipeThreshold || gestureState.vx > HORIZONTAL_FULL_SWIPE_SPEED_THRESHOLD;
     }
 }
 
@@ -338,7 +311,7 @@ const styles = StyleSheet.create({
     slideOutContainer: {
         bottom: 0,
         left: 0,
-        position: 'absolute',
+        position: "absolute",
         right: 0,
         top: 0,
     },

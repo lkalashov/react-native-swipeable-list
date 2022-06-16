@@ -60,6 +60,7 @@ class SwipeableFlatList extends React.Component {
         ...FlatList.defaultProps,
         bounceFirstRowOnMount: true,
         renderQuickActions: () => null,
+        disabled: false,
     };
 
     constructor(props, context) {
@@ -68,7 +69,7 @@ class SwipeableFlatList extends React.Component {
             openRowKey: null,
         };
 
-        this._shouldBounceFirstRowOnMount = this.props.bounceFirstRowOnMount;
+        this._shouldBounceFirstRowOnMount = this.props.bounceFirstRowOnMount && !this.props.disabled;
     }
 
     render() {
@@ -113,6 +114,7 @@ class SwipeableFlatList extends React.Component {
 
         return (
             <SwipeableRow
+                disabled={this.props.disabled}
                 preventSwipeRight
                 slideoutView={slideoutView}
                 isOpen={key === this.state.openRowKey}

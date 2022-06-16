@@ -289,6 +289,10 @@ class SwipeableRow extends React.Component {
 
     // Ignore swipes due to user's finger moving slightly when tapping
     _isValidSwipe(gestureState) {
+        if (this.props.disabled) {
+            return false;
+        }
+
         const preventSwipeRight = this.props.preventSwipeRight ?? false;
         if (preventSwipeRight && this._previousLeft === CLOSED_LEFT_POSITION && gestureState.dx > 0) {
             return false;

@@ -167,6 +167,8 @@ class SwipeableRow extends React.Component {
 
         if (isOpen && !nextIsOpen) {
             this._animateToClosedPosition();
+        } else if (!isOpen && nextIsOpen) {
+            this._animateToOpenPosition();
         }
     }
 
